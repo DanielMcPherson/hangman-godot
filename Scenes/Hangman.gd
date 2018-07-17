@@ -111,6 +111,8 @@ func check_for_game_over():
 
 	# Show appropriate image and see if player has lost
 	if num_missed < 6:
+		# Image has animations named "0", "1", "2", etc that
+		# correspond to the number of missed guesses
 		$Image.play(String(num_missed))
 	else:
 		game_over = true
