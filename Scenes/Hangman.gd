@@ -8,6 +8,8 @@ var game_over   # Whether the game has ended yet
 
 # Secret words to select from
 var words = ["godot", "game", "script"]
+# Strings displayed to the user
+var user_strings
 
 # Set up a new game
 func setup_game():
@@ -23,8 +25,8 @@ func setup_game():
 			display = display + " "
 		else:
 			display = display + "_"
-	# Available alphabet for guesses. Split into rows with \n.
-	alphabet = "abcdefghijklm\nnopqrstuvwxyz"
+	# Available alphabet for guesses
+	alphabet = user_strings["alphabet"]
 	#Initialize variables and display
 	num_missed = 0
 	game_over = false
@@ -38,6 +40,8 @@ func setup_game():
 func _ready():
 	randomize();
 	words = get_from_json("words.json")
+	user_strings = get_from_json("user_strings.json")
+	$AgainButton/AgainText.text = user_strings["again"]
 	setup_game()
 
 
@@ -80,7 +84,7 @@ func _input(event):
 				# See if word is completely guessed
 				if display.find("_") == -1:
 					game_over = true
-					$GameOver.text = "You Win!"
+					$GameOver.text = user_strings["you win"]
 					$AgainButton.visible = true
 			else:
 				# Update image state if guess was wrong
@@ -90,7 +94,7 @@ func _input(event):
 				else:
 					game_over = true
 					$Image.play("lose")
-					$GameOver.text = "You Lose!"
+					$GameOver.text = user_strings["you lose"]
 					$Word.text = secret
 					$AgainButton.visible = true
 
