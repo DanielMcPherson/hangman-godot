@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://gfx/blackboard.jpg" type="Texture" id=1]
 [ext_resource path="res://Scenes/Hangman.gd" type="Script" id=2]
@@ -11,6 +11,8 @@
 [ext_resource path="res://gfx/1_missed1.png" type="Texture" id=9]
 [ext_resource path="res://gfx/2_missed2.png" type="Texture" id=10]
 [ext_resource path="res://gfx/4_missed4.png" type="Texture" id=11]
+[ext_resource path="res://gfx/blue_button11.png" type="Texture" id=12]
+[ext_resource path="res://gfx/blue_button12.png" type="Texture" id=13]
 
 [sub_resource type="DynamicFont" id=1]
 
@@ -64,6 +66,22 @@ animations = [ {
 "name": "4",
 "speed": 5.0
 } ]
+
+[sub_resource type="DynamicFont" id=3]
+
+size = 72
+use_mipmaps = false
+use_filter = false
+font_data = ExtResource( 3 )
+_sections_unfolded = [ "Font", "Settings" ]
+
+[sub_resource type="DynamicFont" id=4]
+
+size = 40
+use_mipmaps = false
+use_filter = false
+font_data = ExtResource( 3 )
+_sections_unfolded = [ "Font", "Settings" ]
 
 [node name="TextureRect" type="TextureRect" index="0"]
 
@@ -150,5 +168,96 @@ _sections_unfolded = [ "BBCode", "Rect", "custom_fonts" ]
 position = Vector2( 745.706, 187.258 )
 frames = SubResource( 2 )
 animation = "0"
+
+[node name="GameOver" type="RichTextLabel" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 38.0
+margin_top = 47.0
+margin_right = 577.0
+margin_bottom = 170.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_fonts/normal_font = SubResource( 3 )
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = "You Win!"
+scroll_active = true
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
+_sections_unfolded = [ "custom_fonts" ]
+
+[node name="AgainButton" type="TextureButton" parent="." index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 132.0
+margin_top = 178.0
+margin_right = 310.0
+margin_bottom = 255.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+texture_normal = ExtResource( 12 )
+texture_pressed = ExtResource( 13 )
+expand = true
+_sections_unfolded = [ "Textures" ]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="AgainText" type="RichTextLabel" parent="AgainButton" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 7.0
+margin_top = 6.0
+margin_right = 175.0
+margin_bottom = 75.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_fonts/normal_font = SubResource( 4 )
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = "Again!"
+scroll_active = true
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
+_sections_unfolded = [ "Mouse", "Pause", "Visibility", "custom_fonts", "custom_styles" ]
+
+[connection signal="pressed" from="AgainButton" to="." method="_on_AgainButton_pressed"]
 
 

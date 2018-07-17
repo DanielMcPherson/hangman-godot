@@ -4,18 +4,32 @@ var secret
 var display
 var alphabet
 var num_missed
+var game_over
 
-func _ready():
+
+func setup_game():
 	secret  = "godot"
 	display = "_____"
 	alphabet = "abcdefghijklm\nnopqrstuvwxyz"
 	num_missed = 0
+	game_over = false
+	$GameOver.text = ""
+	$AgainButton.visible = false
 	$Word.text = display
 	$Alphabet.text = alphabet
 
+
+func _ready():
+	setup_game()
+
+
+func _on_AgainButton_pressed():
+	setup_game()
+
+
 func _input(event):
 	# See if event is a keyboard press
-	if event.is_pressed():
+	if event.is_pressed() and not game_over:
 		# Get key that player pressed
 		var key = event.as_text().to_lower()
 		#
@@ -46,12 +60,17 @@ func _input(event):
 			if found:
 				# See if word is completely guessed
 				if display.find("_") == -1:
-					print("You win!")
+					game_over = true
+					$GameOver.text = "You Win!"
+					$AgainButton.visible = true
 			else:
 				# Update image state if guess was wrong
 				num_missed = num_missed + 1
 				if num_missed < 7:
 					$Image.play(String(num_missed))
 				else:
+					game_over = true
 					$Image.play("lose")
+					$GameOver.text = "You Lose!"
+					$AgainButton.visible = true
 	
