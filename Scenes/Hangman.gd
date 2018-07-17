@@ -82,7 +82,7 @@ func _input(event):
 				display = display.left(i) + key + display.right(i + 1)
 				$Word.text = display
 				# See if there's another instance of this lettter
-				i = secret.findn(key, i + 2)
+				i = secret.findn(key, i + 1)
 				
 			#If player guessed correctly
 			if found:
