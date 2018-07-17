@@ -22,6 +22,7 @@ func _ready():
 
 # Set up a new game
 func setup_game():
+	# Set up alphabet, secret word, and displayed word
 	alphabet = user_strings["alphabet"]
 	pick_random_word()
 	setup_word_display()
@@ -45,6 +46,7 @@ func pick_random_word():
 		# Make sure it's all lower case
 		secret = secret.to_lower()
 
+
 # Create word display of all underscores
 func setup_word_display():
 	display = ""
@@ -67,36 +69,36 @@ func _on_AgainButton_pressed():
 func _input(event):
 	# See if event is a keyboard press
 	if event.is_pressed() and not game_over:
-		# Get key that player pressed
-		var key = event.as_text().to_lower()
-		# NOTE: We shouldn't assume that 'key' is a single character!
+		# Get guess that player pressed
+		var guess = event.as_text().to_lower()
+		# NOTE: We shouldn't assume that 'guess' is a single character!
 		# It might be something like 'escape', 'space', or 'inputeventmousebutton'.
 		# However, those strings won't be found in 'alphabet', so the code won't
 		# try to interpret them as a guess. (It will treat them as a guess that 
 		# has already been made and is being ignored.)
-		handle_guess(key)
+		handle_guess(guess)
 		check_for_game_over()
 
 
 # Handle user guess
-func handle_guess(key):
+func handle_guess(guess):
 	# See if letter has been guessed already
-	var guessed = alphabet.find(key) == -1
+	var guessed = alphabet.find(guess) == -1
 	if not guessed:
 		# Remove letter from available alphabet
-		alphabet = alphabet.replace(key, " ")
+		alphabet = alphabet.replace(guess, " ")
 		$Alphabet.text = alphabet
 		
 		# See if guessed letter is in the secret word
 		var found = false
-		var i = secret.find(key)
+		var i = secret.find(guess)
 		while i > -1:
 			found = true
 			# Show guessed letter in the displayed word
-			display = display.left(i) + key + display.right(i + 1)
+			display = display.left(i) + guess + display.right(i + 1)
 			$Word.text = display
 			# See if there's another instance of this lettter
-			i = secret.findn(key, i + 1)
+			i = secret.findn(guess, i + 1)
 		if not found:
 			num_missed = num_missed + 1
 
@@ -122,6 +124,7 @@ func check_for_game_over():
 		$AgainButton.visible = true
 
 
+# Read data from a json file
 func get_from_json(filename):
 	var file = File.new()
 	file.open(filename, File.READ)
