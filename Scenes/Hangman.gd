@@ -1,13 +1,15 @@
 extends TextureRect
 
-var secret
-var display
-var alphabet
-var num_missed
-var game_over
+var secret      # Word player is trying to guess
+var display     # Partially completed word displayed on screen
+var alphabet    # Letters the player can guess from
+var num_missed  # Number of wrong guesses the player has made
+var game_over   # Whether the game has ended yet
 
-var words = ["godot", "game", "script", "animated sprite", "node", "platformer", "collision", "godot engine"]
+# Secret words to select from
+var words = ["godot", "game", "script"]
 
+# Set up a new game
 func setup_game():
 	# Choose a random word
 	secret  = words[randi() % words.size()]
@@ -21,8 +23,7 @@ func setup_game():
 			display = display + " "
 		else:
 			display = display + "_"
-	# Available alphabet for guesses.
-	# Add a line break to split into two rows.
+	# Available alphabet for guesses. Split into rows with \n.
 	alphabet = "abcdefghijklm\nnopqrstuvwxyz"
 	#Initialize variables and display
 	num_missed = 0
@@ -36,6 +37,7 @@ func setup_game():
 
 func _ready():
 	randomize();
+	words = get_from_json("words.json")
 	setup_game()
 
 
@@ -43,25 +45,26 @@ func _on_AgainButton_pressed():
 	setup_game()
 
 
+# Called when there is user input
 func _input(event):
 	# See if event is a keyboard press
 	if event.is_pressed() and not game_over:
 		# Get key that player pressed
 		var key = event.as_text().to_lower()
-		#
 		# NOTE: We shouldn't assume that 'key' is a single character!
 		# It might be something like 'escape', 'space', or 'inputeventmousebutton'.
 		# However, those strings won't be found in 'alphabet', so the code won't
 		# try to interpret them as a guess. (It will treat them as a guess that 
 		# has already been made and is being ignored.)
-		#
+		
 		# See if letter has been guessed already
 		var guessed = alphabet.find(key) == -1
 		if not guessed:
 			# Remove letter from available alphabet
 			alphabet = alphabet.replace(key, " ")
 			$Alphabet.text = alphabet
-			# See if guessed letter is in secret word
+			
+			# See if guessed letter is in the secret word
 			var found = false
 			var i = secret.find(key)
 			while i > -1:
@@ -90,4 +93,12 @@ func _input(event):
 					$GameOver.text = "You Lose!"
 					$Word.text = secret
 					$AgainButton.visible = true
-	
+
+
+func get_from_json(filename):
+	var file = File.new()
+	file.open(filename, File.READ)
+	var text = file.get_as_text()
+	var data = parse_json(text)
+	file.close()
+	return data
