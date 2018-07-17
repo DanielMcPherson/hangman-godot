@@ -17,16 +17,18 @@ func setup_game():
 	secret  = words[randi() % words.size()]
 	# Make sure it's all lower case
 	secret = secret.to_lower()
+	# Available alphabet for guesses
+	alphabet = user_strings["alphabet"]
 	# Create word display of all underscores
 	display = ""
 	for i in range(secret.length()):
-		# Allow spaces in secret word, don't convert to underscore
-		if secret[i] == " ":
-			display = display + " "
-		else:
+		# If character is in the guessable alphabet, display an underscore
+		# and make the player guess it. If not, just show the character.
+		# This allows spaces and punctuation in secret words/phrases.
+		if alphabet.find(secret[i]) >= 0:
 			display = display + "_"
-	# Available alphabet for guesses
-	alphabet = user_strings["alphabet"]
+		else:
+			display = display + secret[i]
 	#Initialize variables and display
 	num_missed = 0
 	game_over = false
