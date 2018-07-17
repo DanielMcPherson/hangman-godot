@@ -14,9 +14,12 @@ var user_strings
 # Set up a new game
 func setup_game():
 	# Choose a random word
-	secret  = words[randi() % words.size()]
-	# Make sure it's all lower case
-	secret = secret.to_lower()
+	# Make sure it's different from the previous word
+	var previous_word = secret
+	while secret == previous_word:
+		secret  = words[randi() % words.size()]
+		# Make sure it's all lower case
+		secret = secret.to_lower()
 	# Available alphabet for guesses
 	alphabet = user_strings["alphabet"]
 	# Create word display of all underscores
