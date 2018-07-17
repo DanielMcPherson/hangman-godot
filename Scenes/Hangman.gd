@@ -1,0 +1,57 @@
+extends TextureRect
+
+var secret
+var display
+var alphabet
+var num_missed
+
+func _ready():
+	secret  = "godot"
+	display = "_____"
+	alphabet = "abcdefghijklm\nnopqrstuvwxyz"
+	num_missed = 0
+	$Word.text = display
+	$Alphabet.text = alphabet
+
+func _input(event):
+	# See if event is a keyboard press
+	if event.is_pressed():
+		# Get key that player pressed
+		var key = event.as_text().to_lower()
+		#
+		# NOTE: We shouldn't assume that 'key' is a single character!
+		# It might be something like 'escape', 'space', or 'inputeventmousebutton'.
+		# However, those strings won't be found in 'alphabet', so the code won't
+		# try to interpret them as a guess. (It will treat them as a guess that 
+		# has already been made and is being ignored.)
+		#
+		# See if letter has been guessed already
+		var guessed = alphabet.find(key) == -1
+		if not guessed:
+			# Remove letter from available alphabet
+			alphabet = alphabet.replace(key, " ")
+			$Alphabet.text = alphabet
+			# See if guessed letter is in secret word
+			var found = false
+			var i = secret.find(key)
+			while i > -1:
+				found = true
+				# Show guessed letter in the displayed word
+				display = display.left(i) + key + display.right(i + 1)
+				$Word.text = display
+				# See if there's another instance of this lettter
+				i = secret.findn(key, i + 2)
+				
+			#If player guessed correctly
+			if found:
+				# See if word is completely guessed
+				if display.find("_") == -1:
+					print("You win!")
+			else:
+				# Update image state if guess was wrong
+				num_missed = num_missed + 1
+				if num_missed < 7:
+					$Image.play(String(num_missed))
+				else:
+					$Image.play("lose")
+	

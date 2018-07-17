@@ -1,0 +1,154 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://gfx/blackboard.jpg" type="Texture" id=1]
+[ext_resource path="res://Scenes/Hangman.gd" type="Script" id=2]
+[ext_resource path="res://gfx/Feltpen.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://gfx/3_missed3.png" type="Texture" id=4]
+[ext_resource path="res://gfx/5_missed5.png" type="Texture" id=5]
+[ext_resource path="res://gfx/0_start.png" type="Texture" id=6]
+[ext_resource path="res://gfx/6_missed6.png" type="Texture" id=7]
+[ext_resource path="res://gfx/7_lose.png" type="Texture" id=8]
+[ext_resource path="res://gfx/1_missed1.png" type="Texture" id=9]
+[ext_resource path="res://gfx/2_missed2.png" type="Texture" id=10]
+[ext_resource path="res://gfx/4_missed4.png" type="Texture" id=11]
+
+[sub_resource type="DynamicFont" id=1]
+
+size = 48
+use_mipmaps = false
+use_filter = false
+extra_spacing_char = 20
+font_data = ExtResource( 3 )
+_sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "3",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "5",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": false,
+"name": "0",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "6",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "lose",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "4",
+"speed": 5.0
+} ]
+
+[node name="TextureRect" type="TextureRect" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1080.0
+margin_bottom = 720.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 0
+script = ExtResource( 2 )
+_sections_unfolded = [ "Margin" ]
+
+[node name="Alphabet" type="RichTextLabel" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 49.0
+margin_top = 553.0
+margin_right = 1035.0
+margin_bottom = 701.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = "abcdefg"
+scroll_active = true
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
+_sections_unfolded = [ "BBCode", "custom_fonts" ]
+
+[node name="Word" type="RichTextLabel" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 45.0
+margin_top = 457.0
+margin_right = 1031.0
+margin_bottom = 548.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = false
+bbcode_text = ""
+visible_characters = -1
+percent_visible = 1.0
+meta_underlined = true
+tab_size = 4
+text = "word"
+scroll_active = true
+scroll_following = false
+selection_enabled = false
+override_selected_font_color = false
+_sections_unfolded = [ "BBCode", "Rect", "custom_fonts" ]
+
+[node name="Image" type="AnimatedSprite" parent="." index="2"]
+
+position = Vector2( 745.706, 187.258 )
+frames = SubResource( 2 )
+animation = "0"
+
+
