@@ -17,6 +17,7 @@ func setup_game():
 	$AgainButton.visible = false
 	$Word.text = display
 	$Alphabet.text = alphabet
+	$Image.play("0")
 
 
 func _ready():
@@ -66,7 +67,7 @@ func _input(event):
 			else:
 				# Update image state if guess was wrong
 				num_missed = num_missed + 1
-				if num_missed < 7:
+				if num_missed < 6:
 					$Image.play(String(num_missed))
 				else:
 					game_over = true
