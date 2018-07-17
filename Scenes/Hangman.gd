@@ -11,18 +11,42 @@ var words = ["godot", "game", "script"]
 # Strings displayed to the user
 var user_strings
 
+
+# Called on program start
+func _ready():
+	randomize();
+	words = get_from_json("words.json")
+	user_strings = get_from_json("user_strings.json")
+	setup_game()
+
+
 # Set up a new game
 func setup_game():
-	# Choose a random word
+	alphabet = user_strings["alphabet"]
+	pick_random_word()
+	setup_word_display()
+	#Initialize variables and display
+	game_over = false
+	$GameOver.text = ""
+	$AgainButton.visible = false
+	$AgainButton/AgainText.text = user_strings["again"]
+	$Word.text = display
+	$Alphabet.text = alphabet
+	num_missed = 0
+	$Image.play("0")
+
+
+# Choose a random word
+func pick_random_word():
 	# Make sure it's different from the previous word
 	var previous_word = secret
 	while secret == previous_word:
 		secret  = words[randi() % words.size()]
 		# Make sure it's all lower case
 		secret = secret.to_lower()
-	# Available alphabet for guesses
-	alphabet = user_strings["alphabet"]
-	# Create word display of all underscores
+
+# Create word display of all underscores
+func setup_word_display():
 	display = ""
 	for i in range(secret.length()):
 		# If character is in the guessable alphabet, display an underscore
@@ -32,24 +56,9 @@ func setup_game():
 			display = display + "_"
 		else:
 			display = display + secret[i]
-	#Initialize variables and display
-	num_missed = 0
-	game_over = false
-	$GameOver.text = ""
-	$AgainButton.visible = false
-	$Word.text = display
-	$Alphabet.text = alphabet
-	$Image.play("0")
 
 
-func _ready():
-	randomize();
-	words = get_from_json("words.json")
-	user_strings = get_from_json("user_strings.json")
-	$AgainButton/AgainText.text = user_strings["again"]
-	setup_game()
-
-
+# Called when play again button is pressed
 func _on_AgainButton_pressed():
 	setup_game()
 
@@ -65,43 +74,50 @@ func _input(event):
 		# However, those strings won't be found in 'alphabet', so the code won't
 		# try to interpret them as a guess. (It will treat them as a guess that 
 		# has already been made and is being ignored.)
+		handle_guess(key)
+		check_for_game_over()
+
+
+# Handle user guess
+func handle_guess(key):
+	# See if letter has been guessed already
+	var guessed = alphabet.find(key) == -1
+	if not guessed:
+		# Remove letter from available alphabet
+		alphabet = alphabet.replace(key, " ")
+		$Alphabet.text = alphabet
 		
-		# See if letter has been guessed already
-		var guessed = alphabet.find(key) == -1
-		if not guessed:
-			# Remove letter from available alphabet
-			alphabet = alphabet.replace(key, " ")
-			$Alphabet.text = alphabet
-			
-			# See if guessed letter is in the secret word
-			var found = false
-			var i = secret.find(key)
-			while i > -1:
-				found = true
-				# Show guessed letter in the displayed word
-				display = display.left(i) + key + display.right(i + 1)
-				$Word.text = display
-				# See if there's another instance of this lettter
-				i = secret.findn(key, i + 1)
-				
-			#If player guessed correctly
-			if found:
-				# See if word is completely guessed
-				if display.find("_") == -1:
-					game_over = true
-					$GameOver.text = user_strings["you win"]
-					$AgainButton.visible = true
-			else:
-				# Update image state if guess was wrong
-				num_missed = num_missed + 1
-				if num_missed < 6:
-					$Image.play(String(num_missed))
-				else:
-					game_over = true
-					$Image.play("lose")
-					$GameOver.text = user_strings["you lose"]
-					$Word.text = secret
-					$AgainButton.visible = true
+		# See if guessed letter is in the secret word
+		var found = false
+		var i = secret.find(key)
+		while i > -1:
+			found = true
+			# Show guessed letter in the displayed word
+			display = display.left(i) + key + display.right(i + 1)
+			$Word.text = display
+			# See if there's another instance of this lettter
+			i = secret.findn(key, i + 1)
+		if not found:
+			num_missed = num_missed + 1
+
+
+# See if user has won or lost
+func check_for_game_over():
+	# See if word is completely guessed
+	if display.find("_") == -1:
+		game_over = true
+		$GameOver.text = user_strings["you win"]
+		$AgainButton.visible = true
+
+	# Show appropriate image and see if player has lost
+	if num_missed < 6:
+		$Image.play(String(num_missed))
+	else:
+		game_over = true
+		$Image.play("lose")
+		$GameOver.text = user_strings["you lose"]
+		$Word.text = secret
+		$AgainButton.visible = true
 
 
 func get_from_json(filename):
