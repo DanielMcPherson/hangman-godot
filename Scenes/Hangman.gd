@@ -6,11 +6,25 @@ var alphabet
 var num_missed
 var game_over
 
+var words = ["godot", "game", "script", "animated sprite", "node", "platformer", "collision", "godot engine"]
 
 func setup_game():
-	secret  = "godot"
-	display = "_____"
+	# Choose a random word
+	secret  = words[randi() % words.size()]
+	# Make sure it's all lower case
+	secret = secret.to_lower()
+	# Create word display of all underscores
+	display = ""
+	for i in range(secret.length()):
+		# Allow spaces in secret word, don't convert to underscore
+		if secret[i] == " ":
+			display = display + " "
+		else:
+			display = display + "_"
+	# Available alphabet for guesses.
+	# Add a line break to split into two rows.
 	alphabet = "abcdefghijklm\nnopqrstuvwxyz"
+	#Initialize variables and display
 	num_missed = 0
 	game_over = false
 	$GameOver.text = ""
@@ -21,6 +35,7 @@ func setup_game():
 
 
 func _ready():
+	randomize();
 	setup_game()
 
 
@@ -73,5 +88,6 @@ func _input(event):
 					game_over = true
 					$Image.play("lose")
 					$GameOver.text = "You Lose!"
+					$Word.text = secret
 					$AgainButton.visible = true
 	
